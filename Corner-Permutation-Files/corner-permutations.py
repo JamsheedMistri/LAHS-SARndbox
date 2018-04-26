@@ -8,5 +8,5 @@ res = list(itertools.permutations(([one, two, three])))
 
 for i in range(0, len(res)):
     file = open("file {}.txt".format(i), "w")
-    final = "(0.0186967, -0.0280729, 0.999431), -96.9056\n" + "".join(res)
+    final = "(0.0186967, -0.0280729, 0.999431), -96.9056\n" + "".join(res[i])
     file.write(final)
