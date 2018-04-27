@@ -4,7 +4,7 @@ two = "(          40.4625,          -28.3072,          -109.141)\n"
 three = "(          -42.6901,          32.66,          -106.815)\n"
 four = "(          40.6664,          33.5728,          -109.175)\n"
 
-res = list(itertools.permutations(([one, two, three])))
+res = list(itertools.permutations(([one, two, three, four])))
 
 for i in range(0, len(res)):
     file = open("file {}.txt".format(i), "w")
