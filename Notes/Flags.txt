@@ -1,0 +1,92 @@
+Usage: SARndbox [option 1] ... [option n]
+  Options:
+  -h
+     Prints this help message
+  -c <camera index>
+     Selects the local 3D camera of the given index (0: first camera
+     on USB bus)
+     Default: 0
+  -f <frame file name prefix>
+     Reads a pre-recorded 3D video stream from a pair of color/depth
+     files of the given file name prefix
+  -s <scale factor>
+     Scale factor from real sandbox to simulated terrain
+     Default: 100.0 (1:100 scale, 1cm in sandbox is 1m in terrain
+  -slf <sandbox layout file name>
+     Loads the sandbox layout file of the given name
+     Default: /etc/SARndbox-2.3/BoxLayout.txt
+  -er <min elevation> <max elevation>
+     Sets the range of valid sand surface elevations relative to the
+     ground plane in cm
+     Default: Range of elevation color map
+  -hmp <x> <y> <z> <offset>
+     Sets an explicit base plane equation to use for height color mapping
+  -nas <num averaging slots>
+     Sets the number of averaging slots in the frame filter; latency is
+     <num averaging slots> * 1/30 s
+     Default: 30
+  -sp <min num samples> <max variance>
+     Sets the frame filter parameters minimum number of valid samples
+     and maximum sample variance before convergence
+     Default: 10 2
+  -he <hysteresis envelope>
+     Sets the size of the hysteresis envelope used for jitter removal
+     Default: 0.1
+  -wts <water grid width> <water grid height>
+     Sets the width and height of the water flow simulation grid
+     Default: 640 480
+  -ws <water speed> <water max steps>
+     Sets the relative speed of the water simulation and the maximum
+     number of simulation steps per frame
+     Default: 1.0 30
+  -rer <min rain elevation> <max rain elevation>
+     Sets the elevation range of the rain cloud level relative to the
+     ground plane in cm
+     Default: Above range of elevation color map
+  -rs <rain strength>
+     Sets the strength of global or local rainfall in cm/s
+     Default: 0.25
+  -evr <evaporation rate>
+     Water evaporation rate in cm/s
+     Default: 0.0
+  -dds <DEM distance scale>
+     DEM matching distance scale factor in cm
+     Default: 1.0
+  -wi <window index>
+     Sets the zero-based index of the display window to which the
+     following rendering settings are applied
+     Default: 0
+  -fpv [projector transform file name]
+     Fixes the navigation transformation so that Kinect camera and
+     projector are aligned, as defined by the projector transform file
+     of the given name
+     Default projector transform file name: /etc/SARndbox-2.3/ProjectorMatrix.dat
+  -nhs
+     Disables hill shading
+  -uhs
+     Enables hill shading
+  -ns
+     Disables shadows
+  -us
+     Enables shadows
+  -nhm
+     Disables elevation color mapping
+  -uhm [elevation color map file name]
+     Enables elevation color mapping and loads the elevation color map from
+     the file of the given name
+     Default elevation color  map file name: /etc/SARndbox-2.3/HeightColorMap.cpt
+  -ncl
+     Disables topographic contour lines
+  -ucl [contour line spacing]
+     Enables topographic contour lines and sets the elevation distance between
+     adjacent contour lines to the given value in cm
+     Default contour line spacing: 0.75
+  -rws
+     Renders water surface as geometric surface
+  -rwt
+     Renders water surface as texture
+  -wo <water opacity>
+     Sets the water depth at which water appears opaque in cm
+     Default: 2.0
+  -cp <control pipe name>
+     Sets the name of a named POSIX pipe from which to read control commands
