@@ -105,7 +105,7 @@ output, error = kinect_reset_process.communicate()
 
 # sarndbox_process = subprocess.Popen(commands.split(), stdout=subprocess.PIPE)
 # output, error = sarndbox_process.communicate()
-sarndbox_process = subprocess.check_output(['bash', '-c', commands.split()], shell=True)
+sarndbox_process = subprocess.check_output(['bash', '-c', commands], shell=True)
 
 # for line in run_command(commands):
 #     print(line)
