@@ -1,22 +1,25 @@
+import readline
+import subprocess
+from collections import OrderedDict
+
 # Default directory for SARndbox project
 SARNDBOX_DEFAULT_DIR = '~/arsandbox/SARndbox'
 
 # Default options, can be changed at runtime via command line
 options = {
-    'verbose': True, # vruiVerbose
-    'use_projector_transform': True, # fpv
-    'use_elevation_color_map': True, # uhm
-    'scale_factor': '100.0', # s
-    'surface_elevation_range': '-1000 0', # er
-    'override_base_plane': '0 0 -100 -1000', # hmp
-    'averaging_slots': '30', # nas
-    'water_speed': '0.8 10', # ws
-    'shadows': True # us
+    'verbose': True,    # vruiVerbose
+    'use_projector_transform': True,    # fpv
+    'use_elevation_color_map': True,    # uhm
+    'scale_factor': '100.0',    # s
+    'surface_elevation_range': '-1000 0',   # er
+    'override_base_plane': '0 0 -100 -1000',    # hmp
+    'averaging_slots': '30',    # nas
+    'water_speed': '0.8 10',    # ws
+    'shadows': True  # us
 }
 
 
 # Map nice option name to flag name, and vice versa
-from collections import OrderedDict
 option_to_flag = OrderedDict([
     ('verbose', 'vruiVerbose'),
     ('use_projector_transform', 'fpv'),
@@ -28,7 +31,7 @@ option_to_flag = OrderedDict([
     ('water_speed', 'ws'),
     ('shadows', 'us'),
 ])
-flag_to_option = {flag: option for option, flag in option_to_flag.iteritems()}
+flag_to_option = {flag: option for option, flag in option_to_flag.items()}
 
 # Make options order consistent with option_to_flag
 options = OrderedDict([
@@ -39,10 +42,11 @@ options = OrderedDict([
 # Requests user input with pre-filled data
 # https://stackoverflow.com/a/36607077
 def raw_input_default(prompt, default=''):
-    import readline
     readline.set_startup_hook(lambda: readline.insert_text(default))
-    try: return raw_input(prompt) or default
-    finally: readline.set_startup_hook()
+    try:
+        return input(prompt) or default
+    finally:
+        readline.set_startup_hook()
 
 
 # Get project directory
@@ -58,9 +62,10 @@ while True:
         for option, value in options.items()
     ]))
     print('-' * 50)
-    
-    option = raw_input('Press Enter to run, or option name to change option: ')
-    if option == '': break
+
+    option = input('Press Enter to run, or option name to change option: ')
+    if option == '':
+        break
     if option not in options and option in flag_to_option:
         option = flag_to_option[option]
     if option in options:
@@ -72,7 +77,7 @@ while True:
 # Format options as flags
 flags = [
     '' if not value else
-    '-{}'.format(option_to_flag[option]) if value == True else
+    '-{}'.format(option_to_flag[option]) if value is True else
     '-{} {}'.format(option_to_flag[option], value)
     for option, value in options.items()
 ]
@@ -80,11 +85,9 @@ flags = [
 
 # The command to be run in bash
 command = '{} {}'.format(sarndbox_path, ' '.join(flags))
-print('Running...')
-print(command)
+print('Will run: {}'.format(command))
 
 
 # Run the command
-import subprocess
 process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
