@@ -100,17 +100,8 @@ flags = [
 commands = '{} {}'.format(sarndbox_path, ' '.join(flags))
 print('Will run: {}'.format(commands))
 
-kinect_reset_process = subprocess.Popen("KinectUtil reset all".split(), stdout=subprocess.PIPE)
-output, error = kinect_reset_process.communicate()
+kinect_reset_process = subprocess.run("KinectUtil reset all", shell=True, stdout=subprocess.PIPE)
+# output, error = kinect_reset_process.communicate()
 
-sarndbox_process = subprocess.Popen(commands.split(), stdout=subprocess.PIPE)
-output, error = sarndbox_process.communicate()
-# sarndbox_process = subprocess.check_output(['bash', '-c', commands], shell=True)
-
-# for line in run_command(commands):
-#     print(line)
-
-
-# Run the command
-# process = subprocess.Popen(commands.split(), stdout=subprocess.PIPE)
-# output, error = process.communicate()
+sarndbox_process = subprocess.run(commands, shell=True, stdout=subprocess.PIPE)
+# output, error = sarndbox_process.communicate()
