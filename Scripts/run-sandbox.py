@@ -50,10 +50,11 @@ def raw_input_default(prompt, default=''):
         readline.set_startup_hook()
 
 
-# Get project directory
 if (len(sys.argv) >= 1 and (sys.argv[1] == "fast" or sys.argv[1] == "--fast")):
+    # Run using default values
     sarndbox_path = SARNDBOX_DEFAULT_DIR + '/bin/SARndbox'
 else:
+    # Get project directory
     sarndbox_dir = raw_input_default('Enter the path to your SARndbox directory: ', SARNDBOX_DEFAULT_DIR)
     sarndbox_path = sarndbox_dir + '/bin/SARndbox'
 
