@@ -1,5 +1,6 @@
 import readline
 import subprocess
+import sys
 from collections import OrderedDict
 
 # Default directory for SARndbox project
@@ -50,28 +51,30 @@ def raw_input_default(prompt, default=''):
 
 
 # Get project directory
-sarndbox_dir = raw_input_default('Enter the path to your SARndbox directory: ', SARNDBOX_DEFAULT_DIR)
-sarndbox_path = sarndbox_dir + '/bin/SARndbox'
+if (len(sys.argv) >= 1 and (sys.argv[1] == "fast" or sys.argv[1] == "--fast")):
+    sarndbox_path = SARNDBOX_DEFAULT_DIR + '/bin/SARndbox'
+else:
+    sarndbox_dir = raw_input_default('Enter the path to your SARndbox directory: ', SARNDBOX_DEFAULT_DIR)
+    sarndbox_path = sarndbox_dir + '/bin/SARndbox'
 
+    # Edit options
+    while True:
+        print('\nOPTIONS ' + '-' * 42)
+        print('\n'.join([
+            '{} ({}): '.format(option, option_to_flag[option]).ljust(32) + str(value)
+            for option, value in options.items()
+        ]))
+        print('-' * 50)
 
-# Edit options
-while True:
-    print('\nOPTIONS ' + '-' * 42)
-    print('\n'.join([
-        '{} ({}): '.format(option, option_to_flag[option]).ljust(32) + str(value)
-        for option, value in options.items()
-    ]))
-    print('-' * 50)
-
-    option = input('Press Enter to run, or option name to change option: ')
-    if option == '':
-        break
-    if option not in options and option in flag_to_option:
-        option = flag_to_option[option]
-    if option in options:
-        x = raw_input_default(option + ': ', str(options[option]))
-        options[option] = True if x == 'True' else False if x == 'False' else x
-        break
+        option = input('Press Enter to run, or option name to change option: ')
+        if option == '':
+            break
+        if option not in options and option in flag_to_option:
+            option = flag_to_option[option]
+        if option in options:
+            x = raw_input_default(option + ': ', str(options[option]))
+            options[option] = True if x == 'True' else False if x == 'False' else x
+            break
 
 
 # Format options as flags
