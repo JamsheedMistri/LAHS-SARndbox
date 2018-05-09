@@ -4,7 +4,7 @@ import sys
 from collections import OrderedDict
 
 # Default directory for SARndbox project
-SARNDBOX_DEFAULT_DIR = '~/arsandbox/SARndbox'
+SARNDBOX_DEFAULT_DIR = '/home/user/arsandbox/SARndbox'
 
 # Default options, can be changed at runtime via command line
 options = {
@@ -64,7 +64,7 @@ if (len(sys.argv) > 1 and (sys.argv[1] == "fast" or sys.argv[1] == "--fast")):
     sarndbox_path = SARNDBOX_DEFAULT_DIR + '/bin/SARndbox'
 else:
     # Get project directory
-    sarndbox_dir = raw_input_default('Enter the path to your SARndbox directory: ', SARNDBOX_DEFAULT_DIR)
+    sarndbox_dir = raw_input_default('Enter the path to your SARndbox directory (FULL PATH): ', SARNDBOX_DEFAULT_DIR)
     sarndbox_path = sarndbox_dir + '/bin/SARndbox'
 
     # Edit options
@@ -105,5 +105,5 @@ print('Will run: {}'.format(command))
 
 
 # Run the command
-#process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-#output, error = process.communicate()
+process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+output, error = process.communicate()
