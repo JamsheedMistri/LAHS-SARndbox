@@ -98,10 +98,10 @@ flags = [
 
 # The command to be run in bash
 commands = [
-    'KinectUtil reset all',
     '{} {}'.format(sarndbox_path, ' '.join(flags))
 ]
 print('Will run: {}'.format(commands))
+subprocess.Popen(['KinectUtil reset all'])
 for line in run_command(commands):
     print(line)
 
