@@ -97,13 +97,16 @@ flags = [
 
 
 # The command to be run in bash
-command = ('{} {}'.format(sarndbox_path, ' '.join(flags))).split()
-for line in run_command(command):
+commands = [
+    'KinectUtil reset all',
+    '{} {}'.format(sarndbox_path, ' '.join(flags))
+]
+for line in run_command(commands):
     print(line)
 
-print('Will run: {}'.format(command))
+print('Will run: {}'.format(commands))
 
 
 # Run the command
-process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+process = subprocess.Popen(commands.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
