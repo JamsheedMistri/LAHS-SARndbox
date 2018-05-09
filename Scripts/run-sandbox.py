@@ -101,7 +101,10 @@ commands = [
     '{} {}'.format(sarndbox_path, ' '.join(flags))
 ]
 print('Will run: {}'.format(commands))
-subprocess.call(['KinectUtil reset all'])
+
+kinect_reset_process = subprocess.Popen("KinectUtil reset all".split(), stdout=subprocess.PIPE)
+output, error = kinect_reset_process.communicate()
+
 for line in run_command(commands):
     print(line)
 
