@@ -16,7 +16,7 @@ options = {
     'override_base_plane': '0 0 -100 -1000',    # hmp
     'averaging_slots': '30',    # nas
     'water_speed': '0.8 10',    # ws
-    'shadows': True  # us
+    'shadows': True,  # us
 }
 
 
@@ -50,7 +50,7 @@ def raw_input_default(prompt, default=''):
         readline.set_startup_hook()
 
 
-if (len(sys.argv) >= 1 and (sys.argv[1] == "fast" or sys.argv[1] == "--fast")):
+if (len(sys.argv) > 1 and (sys.argv[1] == "fast" or sys.argv[1] == "--fast")):
     # Run using default values
     sarndbox_path = SARNDBOX_DEFAULT_DIR + '/bin/SARndbox'
 else:
@@ -88,10 +88,10 @@ flags = [
 
 
 # The command to be run in bash
-command = '{} {}'.format(sarndbox_path, ' '.join(flags))
+command = 'KinectUtil reset all && {} {}'.format(sarndbox_path, ' '.join(flags))
 print('Will run: {}'.format(command))
 
 
 # Run the command
-process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-output, error = process.communicate()
+#process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+#output, error = process.communicate()
