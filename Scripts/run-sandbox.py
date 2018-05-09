@@ -50,6 +50,15 @@ def raw_input_default(prompt, default=''):
         readline.set_startup_hook()
 
 
+# Allows running of system commands
+# https://stackoverflow.com/a/13135985
+def run_command(command):
+    p = subprocess.Popen(command,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT)
+    return iter(p.stdout.readline, b'')
+
+
 if (len(sys.argv) > 1 and (sys.argv[1] == "fast" or sys.argv[1] == "--fast")):
     # Run using default values
     sarndbox_path = SARNDBOX_DEFAULT_DIR + '/bin/SARndbox'
@@ -88,7 +97,10 @@ flags = [
 
 
 # The command to be run in bash
-command = 'KinectUtil reset all && {} {}'.format(sarndbox_path, ' '.join(flags))
+command = ('{} {}'.format(sarndbox_path, ' '.join(flags))).split()
+for line in run_command(command):
+    print(line)
+
 print('Will run: {}'.format(command))
 
 
