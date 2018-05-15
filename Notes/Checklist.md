@@ -2,5 +2,9 @@
 
 
 - [ ] Dampen Kinect Movement
-- [ ] Make colors work
-- [ ] Find out the cause of "Ran out of time" error
+- [X] Make colors work
+- [ ] Disable sleep on host machine
+- [ ] Hide title bar on machine
+- [ ] Get projector to utilize the entire sandbox
+- [ ] Make easy to run
+- [ ] Teach some of the teacher how to run and calibrate the sandbox
