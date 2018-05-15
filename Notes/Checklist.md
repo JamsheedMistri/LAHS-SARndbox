@@ -8,3 +8,4 @@
 - [ ] Get projector to utilize the entire sandbox
 - [ ] Make easy to run
 - [ ] Teach some of the teacher how to run and calibrate the sandbox
+- [ ] Create checklist for teachers wanting to use the sandbox
