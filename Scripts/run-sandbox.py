@@ -9,14 +9,27 @@ SARNDBOX_DEFAULT_DIR = '/home/user/arsandbox/SARndbox'
 # Default options, can be changed at runtime via command line
 options = {
     'verbose': True,    # vruiVerbose
-    'use_projector_transform': True,    # fpv
-    'use_elevation_color_map': True,    # uhm
-    'scale_factor': '100.0',    # s
-    'surface_elevation_range': '-1000 0',   # er
-    'override_base_plane': '0 0 -100 -1000',    # hmp
+    'use_projector_transform': True, # Always set this to True
+    'use_elevation_coloring': True, # Default: True
+    'scale_factor': '100', # Default: 100.0
+    # 'surface_elevation_range': '-1000 0',   # er
+    # 'override_base_plane': '0 0 -100 -1000',    # hmp
     'averaging_slots': '30',    # nas
-    'water_speed': '0.8 10',    # ws
+    'water_speed': '1.0 200', # speed, steps | default: 1.0 30 # Note: you can change this dynamically via the GUI
     'shadows': True,  # us
+    'hysteresis_envelope': 0.1,
+    'rain_elevation_range': '',
+    'rain_strength': '1', # default: 0.25
+    'evaporation_rate': '-0.005', # default: 0.0 # Note: must be a negative number, or water will explode out of the ground!
+    'water_opacity': '2.0', # default: 2.0
+    'disable_contour_lines': True, # default: False | Note: If set to True, contour_line_distance must be set to False
+    'contour_line_distance': 0.75, # 0.75
+    'enable_hill_shading': True, # Random rectangular terrain lines will appear
+    'enable_shadows': False, # This doesn't seem to do anything.
+    # '': '',
+    # '': '',
+    # '': '',
+    
 }
 
 
@@ -24,13 +37,29 @@ options = {
 option_to_flag = OrderedDict([
     ('verbose', 'vruiVerbose'),
     ('use_projector_transform', 'fpv'),
-    ('use_elevation_color_map', 'uhm'),
+    ('use_elevation_coloring', 'uhm'),
     ('scale_factor', 's'),
-    ('surface_elevation_range', 'er'),
-    ('override_base_plane', 'hmp'),
+    # ('surface_elevation_range', 'er'),
+    # ('override_base_plane', 'hmp'),
     ('averaging_slots', 'nas'),
     ('water_speed', 'ws'),
     ('shadows', 'us'),
+    ('hysteresis_envelope', 'he'),
+    ('rain_elevation_range', 'rer'),
+    ('hysteresis_envelope', 'rs'),
+    ('rain_elevation_range', 'evr'),
+    ('rain_strength', 'rs'),
+    ('evaporation_rate', 'evr'),
+    ('water_opacity', 'wo'),
+    ('disable_contour_lines', 'ncl'),
+    ('contour_line_distance', 'ucl'),
+    ('enable_hill_shading', 'uhs'),
+    ('enable_shadows', 'us'),
+    # ('', ''),
+    # ('', ''),
+    # ('', ''),
+    # ('', ''),
+    # ('', ''),
 ])
 flag_to_option = {flag: option for option, flag in option_to_flag.items()}
 
