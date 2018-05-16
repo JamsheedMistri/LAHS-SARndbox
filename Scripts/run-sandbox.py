@@ -129,7 +129,7 @@ flags = [
 commands = '{} {}'.format(sarndbox_path, ' '.join(flags))
 print('Will run: {}'.format(commands))
 
-def run:
+def run():
     try:
         kinect_reset_process = subprocess.run("KinectUtil reset all", shell=True, timeout=5)   # Run the Kinect reset command
 
