@@ -137,7 +137,7 @@ while True:
     try:
         kinect_reset_process = subprocess.run("KinectUtil reset all", shell=True, timeout=5)
     except subprocess.TimeoutExpired:
-        kinect_reset_process.kill()
+        if kinect_reset_process is not None: kinect_reset_process.kill()
         print('Failed to connect to Kinect. Trying again...')
         continue
         
@@ -145,7 +145,7 @@ while True:
     try:
         sarndbox_process = subprocess.run(commands, shell=True, timeout=5)
     except subprocess.TimeoutExpired:
-        sarndbox_process.kill()
+        if sarndbox_process is not None: sarndbox_process.kill()
         print('Failed to run SARndbox. Trying again...')
         continue
     
