@@ -130,12 +130,21 @@ commands = '{} {}'.format(sarndbox_path, ' '.join(flags))
 print('Will run: {}'.format(commands))
 
 while True:
+     # Run the Kinect reset command
     try:
-        # Run the Kinect reset command
         kinect_reset_process = subprocess.run("KinectUtil reset all", shell=True, timeout=5)
-        # Run the generated SARndbox command and print output
-        sarndbox_process = subprocess.run(commands, shell=True, timeout=5)
-        # Exit infinite loop
-        break
     except subprocess.TimeoutExpired:
-        print('Failed. Trying again...')
+        kinect_reset_process.kill()
+        print('Failed to connect to Kinect. Trying again...')
+        continue
+        
+    # Run the generated SARndbox command and print output
+    try:
+        sarndbox_process = subprocess.run(commands, shell=True, timeout=5)
+    except subprocess.TimeoutExpired:
+        sarndbox_process.kill()
+        print('Failed to run SARndbox. Trying again...')
+        continue
+    
+    # Exit infinite loop
+    break
