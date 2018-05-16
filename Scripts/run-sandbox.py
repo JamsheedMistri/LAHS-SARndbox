@@ -129,6 +129,13 @@ flags = [
 commands = '{} {}'.format(sarndbox_path, ' '.join(flags))
 print('Will run: {}'.format(commands))
 
-kinect_reset_process = subprocess.run("KinectUtil reset all", shell=True)   # Run the Kinect reset command
+def run:
+    try:
+        kinect_reset_process = subprocess.run("KinectUtil reset all", shell=True, timeout=5)   # Run the Kinect reset command
 
-sarndbox_process = subprocess.run(commands, shell=True)  # Run the generated SARndbox command and print output
+        sarndbox_process = subprocess.run(commands, shell=True, timeout=5)  # Run the generated SARndbox command and print output
+    except subprocess.TimeoutExpired:
+        print('Failed. Trying again...')
+        run()
+
+run()
