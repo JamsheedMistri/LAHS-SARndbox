@@ -142,7 +142,7 @@ while True:
         continue
         
     # Run the generated SARndbox command and print output
-    sarndbox_process = subprocess.run(commands, shell=True, timeout=5)
+    sarndbox_process = subprocess.run(commands, shell=True)
     """
     try:
         sarndbox_process = subprocess.run(commands, shell=True, timeout=5)
