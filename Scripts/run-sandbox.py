@@ -142,7 +142,7 @@ while True:
         continue
         
     # Run the generated SARndbox command and print output
-    sarndbox_process = subprocess.run(commands, shell=True)
+    sarndbox_process = subprocess.run(commands, shell=True, stdout=subprocess.PIPE)
     """
     try:
         sarndbox_process = subprocess.run(commands, shell=True, timeout=5)
@@ -151,6 +151,8 @@ while True:
         print('Failed to run SARndbox. Trying again...')
         continue
     """
+    print('stdout:')
+    print(sarndbox_process.stdout)
     
     # Exit infinite loop
     break
