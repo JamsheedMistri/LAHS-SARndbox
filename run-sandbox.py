@@ -19,17 +19,13 @@ options = {
     'shadows': True,  # us
     'hysteresis_envelope': 0.1,
     'rain_elevation_range': '',
-    'rain_strength': '1', # default: 0.25
-    'evaporation_rate': '-0.005', # default: 0.0 # Note: must be a negative number, or water will explode out of the ground!
-    'water_opacity': '2.0', # default: 2.0
-    'disable_contour_lines': True, # default: False | Note: If set to True, contour_line_distance must be set to False
+    'rain_strength': '0.5', # default: 0.25
+    'evaporation_rate': '-0.008', # default: 0.0 # Note: must be a negative number, or water will explode out of the ground!
+    'water_opacity': '1.8', # default: 2.0
+    'disable_contour_lines': False, # default: False | Note: If set to True, contour_line_distance must be set to False
     'contour_line_distance': 0.75, # 0.75
     'enable_hill_shading': True, # Random rectangular terrain lines will appear
-    'enable_shadows': False, # This doesn't seem to do anything.
-    # '': '',
-    # '': '',
-    # '': '',
-    
+    'enable_shadows': True, # This doesn't seem to do anything.
 }
 
 
@@ -55,9 +51,6 @@ option_to_flag = OrderedDict([
     ('contour_line_distance', 'ucl'),
     ('enable_hill_shading', 'uhs'),
     ('enable_shadows', 'us'),
-    # ('', ''),
-    # ('', ''),
-    # ('', ''),
     # ('', ''),
     # ('', ''),
 ])
@@ -130,19 +123,8 @@ commands = '{} {}'.format(sarndbox_path, ' '.join(flags))
 print('Will run: {}'.format(commands))
 
 while True:
-    kinect_reset_process = None
-    sarndbox_process = None
-
-     # Run the Kinect reset command
-    try:
-        kinect_reset_process = subprocess.run("KinectUtil reset all", shell=True, timeout=1)
-    except subprocess.TimeoutExpired:
-        if kinect_reset_process is not None: kinect_reset_process.kill()
-        print('Failed to connect to Kinect. Trying again...')
-        continue
-        
     # Run the generated SARndbox command and print output
-    sarndbox_process = subprocess.run(commands, shell=True)
+    sarndbox_process = subprocess.run(commands, shell=True, stdout=subprocess.PIPE)
     """
     try:
         sarndbox_process = subprocess.run(commands, shell=True, timeout=5)
@@ -151,6 +133,8 @@ while True:
         print('Failed to run SARndbox. Trying again...')
         continue
     """
+    print('stdout:')
+    print(sarndbox_process.stdout)
     
     # Exit infinite loop
     break
