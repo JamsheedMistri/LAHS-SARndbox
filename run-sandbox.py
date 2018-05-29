@@ -2,30 +2,33 @@ import readline
 import subprocess
 import sys
 from collections import OrderedDict
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import *
 
 # Default directory for SARndbox project
 SARNDBOX_DEFAULT_DIR = '/home/user/arsandbox/SARndbox'
 
 # Default options, can be changed at runtime via command line
 options = {
-    'verbose': True,    # vruiVerbose
-    'use_projector_transform': True,    # Always set this to True
-    'use_elevation_coloring': True,  # Default: True
-    'scale_factor': '100',  # Default: 100.0
-    # 'surface_elevation_range': '-1000 0',   # er
-    # 'override_base_plane': '0 0 -100 -1000',    # hmp
-    'averaging_slots': '30',    # nas
-    'water_speed': '1.0 200',   # speed, steps | default: 1.0 30 # Note: you can change this dynamically via the GUI
-    'shadows': True,  # us
-    'hysteresis_envelope': 0.1,
-    'rain_elevation_range': '',
-    'rain_strength': '0.5', # default: 0.25
-    'evaporation_rate': '-0.008',   # default: 0.0 # Note: must be a negative number, or water will explode out of the ground!
-    'water_opacity': '1.8', # default: 2.0
-    'disable_contour_lines': False,  # default: False | Note: If set to True, contour_line_distance must be set to False
-    'contour_line_distance': 0.75,  # 0.75
-    'enable_hill_shading': True,    # Random rectangular terrain lines will appear
-    'enable_shadows': True,  # This doesn't seem to do anything.
+	'verbose': True,    # vruiVerbose
+	'use_projector_transform': True, # Always set this to True
+	'use_elevation_coloring': True, # Default: True
+	'scale_factor': '100', # Default: 100.0
+	# 'surface_elevation_range': '-1000 0',   # er
+	# 'override_base_plane': '0 0 -100 -1000',    # hmp
+	'averaging_slots': '30',    # nas
+	'water_speed': '1.0 200', # speed, steps | default: 1.0 30 # Note: you can change this dynamically via the GUI
+	'shadows': True,  # us
+	'hysteresis_envelope': 0.1,
+	'rain_elevation_range': '',
+	'rain_strength': '0.5', # default: 0.25
+	'evaporation_rate': '-0.008', # default: 0.0 # Note: must be a negative number, or water will explode out of the ground!
+	'water_opacity': '1.8', # default: 2.0
+	'disable_contour_lines': False, # default: False | Note: If set to True, contour_line_distance must be set to False
+	'contour_line_distance': 0.75, # 0.75
+	'enable_hill_shading': True, # Random rectangular terrain lines will appear
+	'enable_shadows': True, # This doesn't seem to do anything.
 }
 
 
@@ -62,79 +65,165 @@ options = OrderedDict([
 ])
 
 
-# Requests user input with pre-filled data
-# https://stackoverflow.com/a/36607077
-def raw_input_default(prompt, default=''):
-    readline.set_startup_hook(lambda: readline.insert_text(default))
-    try:
-        return input(prompt) or default
-    finally:
-        readline.set_startup_hook()
+# Read flag form command line
+def has_flag(flag):
+	return bool(len(sys.argv) > 1 and (flag in sys.argv or '--' + flag in sys.argv))
 
 
-# Allows running of system commands
-# https://stackoverflow.com/a/13135985
-def run_command(command):
-    p = subprocess.Popen(command,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT)
-    return iter(p.stdout.readline, b'')
+# Enter options via GUI
+def gui_options():
+	# Create app
+
+	gui = QApplication(sys.argv)
+	window = QWidget()
+
+	grid = QGridLayout()
+	grid.setSpacing(10)
+	window.setLayout(grid)
 
 
-if len(sys.argv) > 1 and (sys.argv[1] == "fast" or sys.argv[1] == "--fast"):
-    # Run using default values
-    sarndbox_path = SARNDBOX_DEFAULT_DIR + '/bin/SARndbox'
+	# Title, instructions
+
+	title = QLabel('Augmented Reality Sandbox at LAHS')
+	title.setFont(QFont('system', 20, QFont.Bold))
+	grid.addWidget(title)
+
+	instructions = QLabel('Wave your hand with your fingers spread to create rain.\nPress F to flood the sandbox and D to drain.\nMove the light source by dragging or flick the mouse.\nAdditional options can be configured below or in the right-click menu.\n\nHave fun! – Adam Weingram & Darryl Yeo, LAHS Class of 2018')
+	instructions.setFont(QFont('system', 15))
+	grid.addWidget(instructions)
+
+
+	# Options Grid
+
+	subgrid_widget = QWidget()
+	subgrid = QGridLayout()
+	subgrid.setSpacing(10)
+	subgrid_widget.setLayout(subgrid)
+
+
+	# Options methods
+
+	def set_option(option, value):
+		options[option] = value
+		print(option, value)
+
+
+	def bind_option_to_checkbox(option, checkbox):
+		checkbox.stateChanged.connect(lambda: set_option(option, checkbox.isChecked()))
+
+
+	def bind_option_to_textbox(option, textbox):
+		textbox.textChanged.connect(lambda: set_option(option, textbox.text()))
+
+
+	# Options
+
+	y = 0
+	for option, value in options.items():
+		title = QLabel(' '.join(option.split('_')))
+		subgrid.addWidget(title)
+
+		value_input = None
+		if type(value) is bool:
+			value_input = QCheckBox()
+			value_input.setTristate(on=False)
+			value_input.setCheckState(Qt.Checked if value is True else Qt.Unchecked)
+			bind_option_to_checkbox(option, value_input)
+		elif type(value) is str:
+			value_input = QLineEdit()
+			value_input.setText(value)
+			bind_option_to_textbox(option, value_input)
+		subgrid.addWidget(value_input, y, 1)
+		y = y + 1
+	grid.addWidget(subgrid_widget)
+
+
+	# Buttons
+
+	def on_click():
+		run_sandbox()
+		app.close()
+
+	btn = QPushButton('Run Sandbox', window)
+	btn.clicked.connect(on_click)
+	grid.addWidget(btn)
+
+	window.setGeometry(300, 300, 350, 300)
+	window.setWindowTitle('Augmented Reality Sandbox at LAHS')
+	window.show()
+
+	sys.exit(gui.exec_())
+
+
+# Enter options via command line
+def command_line_options():
+	# Requests user input with pre-filled data
+	# https://stackoverflow.com/a/36607077
+	def raw_input_default(prompt, default=''):
+		readline.set_startup_hook(lambda: readline.insert_text(default))
+		try:
+		    return input(prompt) or default
+		finally:
+		    readline.set_startup_hook()
+
+
+	# Allows running of system commands
+	# https://stackoverflow.com/a/13135985
+	def run_command(command):
+		p = subprocess.Popen(command,
+		                     stdout=subprocess.PIPE,
+		                     stderr=subprocess.STDOUT)
+		return iter(p.stdout.readline, b'')
+
+	# Edit options
+	while True:
+	    print('\nOPTIONS ' + '-' * 42)
+	    print('\n'.join([
+	        '{} ({}): '.format(option, option_to_flag[option]).ljust(32) + str(value)
+	        for option, value in options.items()
+	    ]))
+	    print('-' * 50)
+
+	    option = input('Press Enter to run, or option name to change option: ')
+	    if option == '':
+	        break
+	    if option not in options and option in flag_to_option:
+	        option = flag_to_option[option]
+	    if option in options:
+	        x = raw_input_default(option + ': ', str(options[option]))
+	        options[option] = True if x == 'True' else False if x == 'False' else x
+	        break
+
+# Generate flags, run sandbox program
+def run_sandbox(sarndbox_path=SARNDBOX_DEFAULT_DIR + '/bin/SARndbox'):
+	# Format options as flags
+	flags = [
+		'' if not value else
+		'-{}'.format(option_to_flag[option]) if value is True else
+		'-{} {}'.format(option_to_flag[option], value)
+		for option, value in options.items()
+	]
+
+
+	# The command to be run in bash
+	commands = '{} {}'.format(sarndbox_path, ' '.join(flags))
+	print('Will run: {}'.format(commands))
+
+	while True:
+		# Run the generated SARndbox command and print output
+		sarndbox_process = subprocess.run(commands, shell=True, stdout=subprocess.PIPE)
+		# Exit infinite loop
+		break
+
+
+# Edit options
+if has_flag('gui'):
+	print('Running with GUI...')	
+	gui_options()
+elif has_flag('fast'):
+	run_sandbox()
 else:
-    # Get project directory
-    sarndbox_dir = raw_input_default('Enter the path to your SARndbox directory (FULL PATH): ', SARNDBOX_DEFAULT_DIR)
-    sarndbox_path = sarndbox_dir + '/bin/SARndbox'
-
-    # Edit options
-    while True:
-        print('\nOPTIONS ' + '-' * 42)
-        print('\n'.join([
-            '{} ({}): '.format(option, option_to_flag[option]).ljust(32) + str(value)
-            for option, value in options.items()
-        ]))
-        print('-' * 50)
-
-        option = input('Press Enter to run, or option name to change option: ')
-        if option == '':
-            break
-        if option not in options and option in flag_to_option:
-            option = flag_to_option[option]
-        if option in options:
-            x = raw_input_default(option + ': ', str(options[option]))
-            options[option] = True if x == 'True' else False if x == 'False' else x
-            break
-
-
-# Format options as flags
-flags = [
-    '' if not value else
-    '-{}'.format(option_to_flag[option]) if value is True else
-    '-{} {}'.format(option_to_flag[option], value)
-    for option, value in options.items()
-]
-
-
-# The command to be run in bash
-commands = '{} {}'.format(sarndbox_path, ' '.join(flags))
-print('Will run: {}'.format(commands))
-
-while True:
-    # Run the generated SARndbox command and print output
-    sarndbox_process = subprocess.run(commands, shell=True, stdout=subprocess.PIPE)
-    """
-    try:
-        sarndbox_process = subprocess.run(commands, shell=True, timeout=5)
-    except subprocess.TimeoutExpired:
-        if sarndbox_process is not None: sarndbox_process.kill()
-        print('Failed to run SARndbox. Trying again...')
-        continue
-    """
-    print('stdout:')
-    print(sarndbox_process.stdout)
-    
-    # Exit infinite loop
-    break
+	# Get project directory
+	sarndbox_dir = raw_input_default('Enter the path to your SARndbox directory (FULL PATH): ', SARNDBOX_DEFAULT_DIR)
+	sarndbox_path = sarndbox_dir + '/bin/SARndbox'
+	command_line_options()
