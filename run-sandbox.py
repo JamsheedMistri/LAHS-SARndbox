@@ -9,23 +9,23 @@ SARNDBOX_DEFAULT_DIR = '/home/user/arsandbox/SARndbox'
 # Default options, can be changed at runtime via command line
 options = {
     'verbose': True,    # vruiVerbose
-    'use_projector_transform': True, # Always set this to True
-    'use_elevation_coloring': True, # Default: True
-    'scale_factor': '100', # Default: 100.0
+    'use_projector_transform': True,    # Always set this to True
+    'use_elevation_coloring': True,  # Default: True
+    'scale_factor': '100',  # Default: 100.0
     # 'surface_elevation_range': '-1000 0',   # er
     # 'override_base_plane': '0 0 -100 -1000',    # hmp
     'averaging_slots': '30',    # nas
-    'water_speed': '1.0 200', # speed, steps | default: 1.0 30 # Note: you can change this dynamically via the GUI
+    'water_speed': '1.0 200',   # speed, steps | default: 1.0 30 # Note: you can change this dynamically via the GUI
     'shadows': True,  # us
     'hysteresis_envelope': 0.1,
     'rain_elevation_range': '',
     'rain_strength': '0.5', # default: 0.25
-    'evaporation_rate': '-0.008', # default: 0.0 # Note: must be a negative number, or water will explode out of the ground!
+    'evaporation_rate': '-0.008',   # default: 0.0 # Note: must be a negative number, or water will explode out of the ground!
     'water_opacity': '1.8', # default: 2.0
-    'disable_contour_lines': False, # default: False | Note: If set to True, contour_line_distance must be set to False
-    'contour_line_distance': 0.75, # 0.75
-    'enable_hill_shading': True, # Random rectangular terrain lines will appear
-    'enable_shadows': True, # This doesn't seem to do anything.
+    'disable_contour_lines': False,  # default: False | Note: If set to True, contour_line_distance must be set to False
+    'contour_line_distance': 0.75,  # 0.75
+    'enable_hill_shading': True,    # Random rectangular terrain lines will appear
+    'enable_shadows': True,  # This doesn't seem to do anything.
 }
 
 
@@ -81,7 +81,7 @@ def run_command(command):
     return iter(p.stdout.readline, b'')
 
 
-if (len(sys.argv) > 1 and (sys.argv[1] == "fast" or sys.argv[1] == "--fast")):
+if len(sys.argv) > 1 and (sys.argv[1] == "fast" or sys.argv[1] == "--fast"):
     # Run using default values
     sarndbox_path = SARNDBOX_DEFAULT_DIR + '/bin/SARndbox'
 else:
