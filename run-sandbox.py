@@ -10,6 +10,9 @@ from PyQt5.QtWidgets import *
 SARNDBOX_DEFAULT_DIR = '/home/user/arsandbox/SARndbox'
 CALIBRATE_SCRIPT_LOCATION = '/bin/CalibrateProjector'
 
+TITLE = 'Augmented Reality Sandbox at LAHS'
+BLURB = 'Wave your hand with your fingers spread to create rain.\nPress F to flood the sandbox and D to drain.\nMove the light source by dragging, flicking, or scrolling with the mouse.\nAdditional options can be configured below or in the right-click menu.\n\nHave fun! - Adam Weingram & Darryl Yeo, LAHS Class of 2018'
+
 # Default options, can be changed at runtime via command line
 options = {
     'verbose': True,    # vruiVerbose
@@ -36,22 +39,22 @@ options = {
 options_gui_notes = {
     # 'verbose': 'More verbose output on the command line', 
     # 'use_projector_transform': '',
-    'use_elevation_coloring': 'Colors the height map',
+    'use_elevation_coloring': 'Colors the height map.',
     'scale_factor': '100', # Default: 100.0
     # 'surface_elevation_range': '',
     # 'override_base_plane': '',
     # 'averaging_slots': '30',
-    'water_speed': 'Format: speed [space] steps\nDefault: 1.0 30\nNote: you can change this dynamically via the GUI',
+    'water_speed': 'Format: speed [space] steps\nDefault: 1.0 30\nNote: you can change this dynamically via the GUI.',
     'shadows': '',
     'hysteresis_envelope': 'Makes the water jitter?',
     # 'rain_elevation_range': '',
     'rain_strength': 'How much water flows out of your hand.',
     'evaporation_rate': 'How fast water disappears. Must be a negative number, or water will explode out of the ground!',
     'water_opacity': 'Decrease for more translucent water, increase for more opaque water.',
-    'disable_contour_lines': 'If checked, be sure to uncheck "contour line distance" below',
-    'contour_line_distance': 'Height difference between contour lines',
+    'disable_contour_lines': 'If checked, be sure to uncheck "contour line distance" below.',
+    'contour_line_distance': 'Height difference between contour lines.',
     'enable_hill_shading': 'Turn on shadows.',
-    'enable_shadows': 'This doesn\'t seem to do anything',
+    'enable_shadows': 'This doesn\'t seem to do anything.',
 }
 
 
@@ -126,12 +129,12 @@ def gui_options():
 
     # Title, instructions
 
-    title = QLabel('Augmented Reality Sandbox at LAHS')
+    title = QLabel(TITLE)
     title.setFont(QFont('system', 20, QFont.Bold))
     grid.addWidget(title)
 
-    instructions = QLabel('Wave your hand with your fingers spread to create rain.\nPress F to flood the sandbox and D to drain.\nMove the light source by dragging or flick the mouse.\nAdditional options can be configured below or in the right-click menu.\n\nHave fun! - Adam Weingram & Darryl Yeo, LAHS Class of 2018')
-    instructions.setFont(QFont('system', 13))
+    instructions = QLabel(BLURB)
+    instructions.setFont(QFont('system', 11))
     grid.addWidget(instructions)
 
 
@@ -144,13 +147,26 @@ def gui_options():
         window.close()
         run_sandbox()
 
+    def on_exit_click():
+        window.close()
+
+    button_grid_widget = QWidget()
+    button_grid = QGridLayout()
+    button_grid.setSpacing(10)
+    button_grid_widget.setLayout(button_grid)
+
+    btn = QPushButton('Exit', window)
+    btn.clicked.connect(on_exit_click)
+    button_grid.addWidget(btn)
+
     btn = QPushButton('Calibrate Sandbox', window)
     btn.clicked.connect(on_calibrate_sandbox_click)
-    grid.addWidget(btn)
+    button_grid.addWidget(btn, 0, 1)
 
-    btn = QPushButton('Run Sandbox!', window)
+    btn = QPushButton('Run Sandbox! (options below)', window)
     btn.clicked.connect(on_run_sandbox_click)
-    grid.addWidget(btn)
+    button_grid.addWidget(btn, 0, 2)
+    grid.addWidget(button_grid_widget)
 
 
     # Options Grid
@@ -213,7 +229,7 @@ def gui_options():
     grid.addWidget(subgrid_widget)
 
     window.setGeometry(300, 300, 350, 300)
-    window.setWindowTitle('Augmented Reality Sandbox at LAHS')
+    window.setWindowTitle(TITLE)
     window.show()
 
     sys.exit(gui.exec_())
