@@ -31,43 +31,75 @@ options = {
 	'enable_shadows': True, # This doesn't seem to do anything.
 }
 
+# Notes to display on the options GUI (comment out to hide)
+options_gui_notes = {
+	# 'verbose': 'More verbose output on the command line', 
+	# 'use_projector_transform': '',
+	'use_elevation_coloring': 'Colors the height map',
+	'scale_factor': '100', # Default: 100.0
+	# 'surface_elevation_range': '',
+	# 'override_base_plane': '',
+	# 'averaging_slots': '30',
+	'water_speed': 'Format: speed [space] steps\nDefault: 1.0 30\nNote: you can change this dynamically via the GUI',
+	'shadows': '',
+	'hysteresis_envelope': 'Makes the water jitter?',
+	# 'rain_elevation_range': '',
+	'rain_strength': 'How much water flows out of your hand.',
+	'evaporation_rate': 'How fast water disappears. Must be a negative number, or water will explode out of the ground!',
+	'water_opacity': 'Decrease for more translucent water, increase for more opaque water.',
+	'disable_contour_lines': 'If checked, be sure to uncheck "contour line distance" below',
+	'contour_line_distance': 'Height difference between contour lines',
+	'enable_hill_shading': 'Turn on shadows.',
+	'enable_shadows': 'This doesn\'t seem to do anything',
+}
+
 
 # Map nice option name to flag name, and vice versa
 option_to_flag = OrderedDict([
-    ('verbose', 'vruiVerbose'),
-    ('use_projector_transform', 'fpv'),
-    ('use_elevation_coloring', 'uhm'),
-    ('scale_factor', 's'),
-    # ('surface_elevation_range', 'er'),
-    # ('override_base_plane', 'hmp'),
-    ('averaging_slots', 'nas'),
-    ('water_speed', 'ws'),
-    ('shadows', 'us'),
-    ('hysteresis_envelope', 'he'),
-    ('rain_elevation_range', 'rer'),
-    ('hysteresis_envelope', 'rs'),
-    ('rain_elevation_range', 'evr'),
-    ('rain_strength', 'rs'),
-    ('evaporation_rate', 'evr'),
-    ('water_opacity', 'wo'),
-    ('disable_contour_lines', 'ncl'),
-    ('contour_line_distance', 'ucl'),
-    ('enable_hill_shading', 'uhs'),
-    ('enable_shadows', 'us'),
-    # ('', ''),
-    # ('', ''),
+	('verbose', 'vruiVerbose'),
+	('use_projector_transform', 'fpv'),
+	('use_elevation_coloring', 'uhm'),
+	('scale_factor', 's'),
+	# ('surface_elevation_range', 'er'),
+	# ('override_base_plane', 'hmp'),
+	('averaging_slots', 'nas'),
+	('water_speed', 'ws'),
+	('shadows', 'us'),
+	('hysteresis_envelope', 'he'),
+	('rain_elevation_range', 'rer'),
+	('hysteresis_envelope', 'rs'),
+	('rain_elevation_range', 'evr'),
+	('rain_strength', 'rs'),
+	('evaporation_rate', 'evr'),
+	('water_opacity', 'wo'),
+	('disable_contour_lines', 'ncl'),
+	('contour_line_distance', 'ucl'),
+	('enable_hill_shading', 'uhs'),
+	('enable_shadows', 'us'),
+	# ('', ''),
+	# ('', ''),
 ])
 flag_to_option = {flag: option for option, flag in option_to_flag.items()}
 
 # Make options order consistent with option_to_flag
 options = OrderedDict([
-    (option, options[option]) for option in option_to_flag
+	(option, options[option]) for option in option_to_flag
 ])
 
 
 # Read flag form command line
 def has_flag(flag):
 	return bool(len(sys.argv) > 1 and (flag in sys.argv or '--' + flag in sys.argv))
+
+
+# Requests user input with pre-filled data
+# https://stackoverflow.com/a/36607077
+def raw_input_default(prompt, default=''):
+	readline.set_startup_hook(lambda: readline.insert_text(default))
+	try:
+		return input(prompt) or default
+	finally:
+		readline.set_startup_hook()
 
 
 # Enter options via GUI
@@ -89,8 +121,19 @@ def gui_options():
 	grid.addWidget(title)
 
 	instructions = QLabel('Wave your hand with your fingers spread to create rain.\nPress F to flood the sandbox and D to drain.\nMove the light source by dragging or flick the mouse.\nAdditional options can be configured below or in the right-click menu.\n\nHave fun! – Adam Weingram & Darryl Yeo, LAHS Class of 2018')
-	instructions.setFont(QFont('system', 15))
+	instructions.setFont(QFont('system', 13))
 	grid.addWidget(instructions)
+
+
+	# Buttons
+
+	def on_click():
+		run_sandbox()
+		app.close()
+
+	btn = QPushButton('Run Sandbox!', window)
+	btn.clicked.connect(on_click)
+	grid.addWidget(btn)
 
 
 	# Options Grid
@@ -120,6 +163,7 @@ def gui_options():
 
 	y = 0
 	for option, value in options.items():
+		if option not in options_gui_notes: continue
 		title = QLabel(' '.join(option.split('_')))
 		subgrid.addWidget(title)
 
@@ -137,17 +181,6 @@ def gui_options():
 		y = y + 1
 	grid.addWidget(subgrid_widget)
 
-
-	# Buttons
-
-	def on_click():
-		run_sandbox()
-		app.close()
-
-	btn = QPushButton('Run Sandbox', window)
-	btn.clicked.connect(on_click)
-	grid.addWidget(btn)
-
 	window.setGeometry(300, 300, 350, 300)
 	window.setWindowTitle('Augmented Reality Sandbox at LAHS')
 	window.show()
@@ -157,42 +190,32 @@ def gui_options():
 
 # Enter options via command line
 def command_line_options():
-	# Requests user input with pre-filled data
-	# https://stackoverflow.com/a/36607077
-	def raw_input_default(prompt, default=''):
-		readline.set_startup_hook(lambda: readline.insert_text(default))
-		try:
-		    return input(prompt) or default
-		finally:
-		    readline.set_startup_hook()
-
-
 	# Allows running of system commands
 	# https://stackoverflow.com/a/13135985
 	def run_command(command):
 		p = subprocess.Popen(command,
-		                     stdout=subprocess.PIPE,
-		                     stderr=subprocess.STDOUT)
+							stdout=subprocess.PIPE,
+							stderr=subprocess.STDOUT)
 		return iter(p.stdout.readline, b'')
 
 	# Edit options
 	while True:
-	    print('\nOPTIONS ' + '-' * 42)
-	    print('\n'.join([
-	        '{} ({}): '.format(option, option_to_flag[option]).ljust(32) + str(value)
-	        for option, value in options.items()
-	    ]))
-	    print('-' * 50)
+		print('\nOPTIONS ' + '-' * 42)
+		print('\n'.join([
+			'{} ({}): '.format(option, option_to_flag[option]).ljust(32) + str(value)
+			for option, value in options.items()
+		]))
+		print('-' * 50)
 
-	    option = input('Press Enter to run, or option name to change option: ')
-	    if option == '':
-	        break
-	    if option not in options and option in flag_to_option:
-	        option = flag_to_option[option]
-	    if option in options:
-	        x = raw_input_default(option + ': ', str(options[option]))
-	        options[option] = True if x == 'True' else False if x == 'False' else x
-	        break
+		option = input('Press Enter to run, or option name to change option: ')
+		if option == '':
+			break
+		if option not in options and option in flag_to_option:
+			option = flag_to_option[option]
+		if option in options:
+			x = raw_input_default(option + ': ', str(options[option]))
+			options[option] = True if x == 'True' else False if x == 'False' else x
+			break
 
 # Generate flags, run sandbox program
 def run_sandbox(sarndbox_path=SARNDBOX_DEFAULT_DIR + '/bin/SARndbox'):
@@ -227,3 +250,4 @@ else:
 	sarndbox_dir = raw_input_default('Enter the path to your SARndbox directory (FULL PATH): ', SARNDBOX_DEFAULT_DIR)
 	sarndbox_path = sarndbox_dir + '/bin/SARndbox'
 	command_line_options()
+	run_sandbox()
