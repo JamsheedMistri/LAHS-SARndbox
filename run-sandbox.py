@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import *
 
 # Default directory for SARndbox project
 SARNDBOX_DEFAULT_DIR = '/home/user/arsandbox/SARndbox'
+CALIBRATE_SCRIPT_LOCATION = '/bin/CalibrateProjector'
 
 # Default options, can be changed at runtime via command line
 options = {
@@ -136,12 +137,19 @@ def gui_options():
 
     # Buttons
 
-    def on_click():
+    def on_calibrate_sandbox_click():
+        subprocess.run(SARNDBOX_DEFAULT_DIR + CALIBRATE_SCRIPT_LOCATION, shell=True, stdout=subprocess.PIPE)
+
+    def on_run_sandbox_click():
         window.close()
         run_sandbox()
 
+    btn = QPushButton('Calibrate Sandbox', window)
+    btn.clicked.connect(on_calibrate_sandbox_click)
+    grid.addWidget(btn)
+
     btn = QPushButton('Run Sandbox!', window)
-    btn.clicked.connect(on_click)
+    btn.clicked.connect(on_run_sandbox_click)
     grid.addWidget(btn)
 
 
