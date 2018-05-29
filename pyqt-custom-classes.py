@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
 
+
 # Example function
 def foo():
     print("foo!")
@@ -11,10 +12,10 @@ class Choice(QWidget):
     def __init__(self, question, window_title, options):
         super().__init__()
         buttons = []
-        self.initUI(question, window_title, options, buttons)
+        self.init_ui(question, window_title, options, buttons)
         print(buttons)
 
-    def initUI(self, question, window_title, options, buttons):
+    def init_ui(self, question, window_title, options, buttons):
         grid = QGridLayout()
         grid.setSpacing(10)
         grid.addWidget(QLabel(question), 1, 0)
@@ -29,6 +30,7 @@ class Choice(QWidget):
         self.setGeometry(300, 300, 350, 300)
         self.setWindowTitle(window_title)
         self.show()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

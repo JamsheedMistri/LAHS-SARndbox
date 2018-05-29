@@ -16,5 +16,5 @@ if [[ $result == $calibrate ]]; then
 #elif [[ $result == $run ]]; then
 else
 #    /home/user/arsandbox/SARndbox/bin/SARndbox -vruiVerbose -fpv -uhm -s 100 -nas 30 -ws 1.0 200 -us -rs 0.1  -rs 1 -evr -0.005 -wo 2.0 -ncl -ucl 0.75 -uhs
-    python3 ./ar-sandbox/run-sandbox.py --fast
+    python3 /home/user/Desktop/lahs-sarndbox/run-sandbox.py --fast
 fi
