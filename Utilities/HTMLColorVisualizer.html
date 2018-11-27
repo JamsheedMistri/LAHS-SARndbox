@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML Color Visualizer</title>
+	<style>
+	body, html {
+		font-family: sans-serif;
+		background: black;
+		text-align: center;
+	}
+	table {
+		color: white;
+		font-size: 2em;
+	}
+	th, tr {
+		width: 50vw;
+	}
+	td {
+		font-size: 0.9em;
+	}
+	</style>
+</head>
+<body>
+	<table>
+		<thead>
+			<th>Depth</th>
+			<th>Color</th>
+			<th>Value</th>
+		</thead>
+		<tbody id="tbody"></tbody>
+	</table>
+	<script src="jquery.js"></script>
+	<script src="HeightColorMap.js"></script>
+	<script>
+		var split = colors.split("\n");
+		for (var line in split) {
+			var values = split[line].split(" ");
+			$("#tbody").append("<tr>");
+			$("#tbody").append(`<td>${values[0]}</td>`);
+			$("#tbody").append(`<td style="background: rgb(${values[1]}, ${values[2]}, ${values[3]})"></td>`);
+			$("#tbody").append(`<td>rgb(${values[1]}, ${values[2]}, ${values[3]})</td>`);
+			$("#tbody").append("</tr>");
+		}
+	</script>
+</body>
+</html>
