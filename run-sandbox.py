@@ -17,7 +17,7 @@ BLURB = 'Wave your hand with your fingers spread to create rain.\nPress F to flo
 options = {
     'verbose': True,    # vruiVerbose
     'use_projector_transform': True, # Always set this to True
-    'use_elevation_coloring': True, # Default: True
+    'use_elevation_coloring': '/home/user/Desktop/lahs-sarndbox/Config Files/etc SArndbox/HeightColorMap.cpt', # Default: True
     'scale_factor': '100', # Default: 100.0
     # 'surface_elevation_range': '-1000 0',   # er
     # 'override_base_plane': '0 0 -100 -1000',    # hmp
