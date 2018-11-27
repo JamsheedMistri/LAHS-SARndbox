@@ -11,7 +11,7 @@ SARNDBOX_DEFAULT_DIR = '/home/user/arsandbox/SARndbox'
 CALIBRATE_SCRIPT_LOCATION = '/bin/CalibrateProjector'
 
 TITLE = 'Augmented Reality Sandbox at LAHS'
-BLURB = 'Wave your hand with your fingers spread to create rain.\nPress F to flood the sandbox and D to drain.\nMove the light source by dragging, flicking, or scrolling with the mouse.\nAdditional options can be configured below or in the right-click menu.\n\nHave fun! - Adam Weingram & Darryl Yeo, LAHS Class of 2018'
+BLURB = 'Wave your hand with your fingers spread to create rain.\nPress F to flood the sandbox and D to drain.\nMove the light source by dragging, flicking, or scrolling with the mouse.\nAdditional options can be configured below or in the right-click menu.\n\nHave fun! - Adam Weingram & Darryl Yeo, LAHS Class of 2018\n\nModified and improved by Jamsheed Mistri, Nathan MacLeod, Jasper Meggitt, & Kyle Marino, LAHS Class of 2019'
 
 # Default options, can be changed at runtime via command line
 options = {
