@@ -17,7 +17,7 @@ BLURB = 'Wave your hand with your fingers spread to create rain.\nPress F to flo
 options = {
     'verbose': True,    # vruiVerbose
     'use_projector_transform': True, # Always set this to True
-    'use_elevation_coloring': '/home/user/Desktop/lahs-sarndbox/Config Files/etc SArndbox/HeightColorMap.cpt', # Default: True
+    'elevation_coloring_file': '/home/user/Desktop/lahs-sarndbox/Config\\ Files/etc SArndbox/HeightColorMap.cpt', # Default: True
     'scale_factor': '100', # Default: 100.0
     # 'surface_elevation_range': '-1000 0',   # er
     # 'override_base_plane': '0 0 -100 -1000',    # hmp
@@ -39,7 +39,7 @@ options = {
 options_gui_notes = {
     # 'verbose': 'More verbose output on the command line', 
     # 'use_projector_transform': '',
-    'use_elevation_coloring': 'Colors the height map.',
+    'elevation_coloring_file': 'Elevation coloring file.',
     'scale_factor': '100', # Default: 100.0
     # 'surface_elevation_range': '',
     # 'override_base_plane': '',
@@ -62,7 +62,7 @@ options_gui_notes = {
 option_to_flag = OrderedDict([
     ('verbose', 'vruiVerbose'),
     ('use_projector_transform', 'fpv'),
-    ('use_elevation_coloring', 'uhm'),
+    ('elevation_coloring_file', 'uhm'),
     ('scale_factor', 's'),
     # ('surface_elevation_range', 'er'),
     # ('override_base_plane', 'hmp'),
@@ -212,7 +212,7 @@ def gui_options():
             value_input = QLineEdit()
             value_input.setText(str(value))
             bind_option_to_textbox(option, value_input)
-            value_input.setFixedWidth(50)
+            value_input.setFixedWidth(200)
             # value_input.setGeometry(0, 0, 200, 50)
         subgrid.addWidget(value_input, y, 1)
 
