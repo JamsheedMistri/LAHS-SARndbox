@@ -212,7 +212,7 @@ def gui_options():
             value_input = QLineEdit()
             value_input.setText(str(value))
             bind_option_to_textbox(option, value_input)
-            value_input.setFixedWidth(200)
+            value_input.setFixedWidth(400)
             # value_input.setGeometry(0, 0, 200, 50)
         subgrid.addWidget(value_input, y, 1)
 
@@ -228,7 +228,7 @@ def gui_options():
         y += 1
     grid.addWidget(subgrid_widget)
 
-    window.setGeometry(300, 300, 350, 300)
+    window.setGeometry(50, 50, 400, 300)
     window.setWindowTitle(TITLE)
     window.show()
 
