@@ -228,7 +228,7 @@ def gui_options():
         y += 1
     grid.addWidget(subgrid_widget)
 
-    window.setGeometry(50, 50, 400, 300)
+    window.setGeometry(50, 50, 620, 500)
     window.setWindowTitle(TITLE)
     window.show()
 
